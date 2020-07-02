@@ -1,11 +1,11 @@
-# Import the English language class
+# Импорт класса английского языка
 from spacy.lang.____ import ____
 
-# Create the nlp object
+# Создание объекта nlp
 nlp = ____
 
-# Process a text
+# Обработка текста (это переводится с английского как "Это предложение.")
 doc = nlp("This is a sentence.")
 
-# Print the document text
+# Вывод текстового значения документа
 print(____.text)

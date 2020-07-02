@@ -1,13 +1,13 @@
-# Import the English language class and create the nlp object
+# Импорт класса английского языка и создание объекта nlp
 from ____ import ____
 
 nlp = ____
 
-# Process the text
+# Обработка текста
 doc = ____("I like tree kangaroos and narwhals.")
 
-# Select the first token
+# Получение первого токена
 first_token = doc[____]
 
-# Print the first token's text
+# Вывод текстового значения токена
 print(first_token.____)

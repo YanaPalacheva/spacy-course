@@ -9,14 +9,14 @@ doc = nlp(
     "labels and optional voice responses."
 )
 
-# Write a pattern for adjective plus one or two nouns
+# Шаблон для последовательности прилагательное + существительное (одно или два)
 pattern = [{"POS": ____}, {"POS": ____}, {"POS": ____, "OP": ____}]
 
-# Add the pattern to the matcher and apply the matcher to the doc
+# Добавление шаблона в матчер и применение матчера к документу
 matcher.add("ADJ_NOUN_PATTERN", None, pattern)
 matches = matcher(doc)
 print("Total matches found:", len(matches))
 
-# Iterate over the matches and print the span text
+# Перебор найденных соответствий и вывод их текстовых значений
 for match_id, start, end in matches:
     print("Match found:", doc[start:end].text)

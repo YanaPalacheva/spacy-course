@@ -2,38 +2,37 @@
 type: slides
 ---
 
-# Statistical models
+# Статистические модели
 
-Notes: Let's add some more power to the `nlp` object!
+Notes: Давайте снабдим объект `nlp` новыми возможностями!
 
-In this lesson, you'll learn about spaCy's statistical models.
-
----
-
-# What are statistical models?
-
-- Enable spaCy to predict linguistic attributes _in context_
-  - Part-of-speech tags
-  - Syntactic dependencies
-  - Named entities
-- Trained on labeled example texts
-- Can be updated with more examples to fine-tune predictions
-
-Notes: Some of the most interesting things you can analyze are context-specific:
-for example, whether a word is a verb or whether a span of text is a person
-name.
-
-Statistical models enable spaCy to make predictions in context. This usually
-includes part-of speech tags, syntactic dependencies and named entities.
-
-Models are trained on large datasets of labeled example texts.
-
-They can be updated with more examples to fine-tune their predictions – for
-example, to perform better on your specific data.
+В этом уроке вы узнаете о статистических моделях spaCy.
 
 ---
 
-# Model Packages
+# Что представляют из себя статистические модели?
+
+- Дают возможность spaCy предсказывать лингвистические атрибуты учитывая _контекст_
+  - Части речи
+  - Синтаксические роли
+  - Именованные сущности
+- Натренированы на размеченных текстах
+- Могут быть дополнены новыми данными, чтобы улучшить предсказания
+
+Notes: Задачи, представляющие наибольший интерес, часто контестно-зависимые: определить, 
+например, является ли данное слово глаголом или спан текста - каким-то именем собственным.
+
+Статистические модели позволяют spaCy учитывать контекст при предсказаниях. Обычно
+это касается определения частей речи, синтаксических ролей и распознавания именованных сущностей.
+
+Модели натренированы на больших массивах размеченных текстов.
+
+Чтобы улучшить качество предсказаний, модели можно дополнить новыми вхождениями:
+это может помочь при работе с конкретно вашими данными.
+
+---
+
+# Пакеты моделей
 
 <img src="/package.png" alt="A package with the label en_core_web_sm" width="30%" align="right" />
 
@@ -47,39 +46,39 @@ import spacy
 nlp = spacy.load("en_core_web_sm")
 ```
 
-- Binary weights
-- Vocabulary
-- Meta information (language, pipeline)
+- Матрица весов
+- Вокабуляр
+- Метаданные (язык, компоненты пайплайна)
 
-Notes: spaCy provides a number of pre-trained model packages you can download
-using the `spacy download` command. For example, the "en_core_web_sm" package is
-a small English model that supports all core capabilities and is trained on web
-text.
+spaCy предоставляет несколько предварительно обученных моделей, которые можно загрузить как пакеты
+с помощью команды `spacy download`. К примеру, пакет "en_core_web_sm" содержит
+небольшую модель для английского языка, которая была обучена на текстах из сети и 
+поддерживает все ключевые возможности.
 
-The `spacy.load` method loads a model package by name and returns an `nlp`
-object.
+Загрузить пакет с моделью можно с помощью метода `spacy.load`: он принимает на вход имя модели 
+и возвращает объект `nlp`.
 
-The package provides the binary weights that enable spaCy to make predictions.
+Такой пакет также включает в себя матрицу весов, которая позволяет spaCy делать предсказания.
 
-It also includes the vocabulary, and meta information to tell spaCy which
-language class to use and how to configure the processing pipeline.
+Кроме того, в него входят вокабуляр и метаданные, которые сообщают spaCy, 
+класс какого языка нужно использовать и как построить пайплайн обработки.
 
 ---
 
-# Predicting Part-of-speech Tags
+# Предсказание частей речи
 
 ```python
 import spacy
 
-# Load the small English model
+# Загрузка небольшой модели для английского языка
 nlp = spacy.load("en_core_web_sm")
 
-# Process a text
+# Обработка текста
 doc = nlp("She ate the pizza")
 
-# Iterate over the tokens
+# Перебор токенов
 for token in doc:
-    # Print the text and the predicted part-of-speech tag
+    # Вывод текстового значения токена и части речи, предсказанной для него моделью
     print(token.text, token.pos_)
 ```
 
@@ -90,24 +89,27 @@ the DET
 pizza NOUN
 ```
 
-Notes: Let's take a look at the model's predictions. In this example, we're
-using spaCy to predict part-of-speech tags, the word types in context.
+Notes: Давайте посмотрим на то, как модель делает предсказания. 
+В этом примере мы используем spaCy для предсказания частей речи слов в контексте.
 
-First, we load the small English model and receive an `nlp` object.
+Сначала мы загружаем небольшую модель для английского языка и 
+создаём объект `nlp`.
 
-Next, we're processing the text "She ate the pizza".
+На следующем шаге мы обрабатываем текст "She ate the pizza" ("Она ела пиццу"). 
 
-For each token in the doc, we can print the text and the `.pos_` attribute, the
-predicted part-of-speech tag.
+Дальше мы выводим текстовое значение каждого токена и значение его атрибута `.pos_`,
+который хранит предсказанную для этого токена часть речи.
 
-In spaCy, attributes that return strings usually end with an underscore –
-attributes without the underscore return an integer ID value.
+В spaCy атрибуты, имена которых заканчиваются нижним подчёркиванием, 
+обычно содержат строки, в то время как атрибуты без нижнего подчёркивания в имени 
+содержат целочисленные значения.
 
-Here, the model correctly predicted "ate" as a verb and "pizza" as a noun.
+В данном примере, модель сделала верные предсказания для глагола "ate"("ела")  и 
+существительного "pizza"("пицца").
 
 ---
 
-# Predicting Syntactic Dependencies
+# Предсказание синтаксических ролей
 
 ```python
 for token in doc:
@@ -121,51 +123,49 @@ the DET det pizza
 pizza NOUN dobj ate
 ```
 
-Notes: In addition to the part-of-speech tags, we can also predict how the words
-are related. For example, whether a word is the subject of the sentence or an
-object.
+Notes: Помимо частей речи, мы имеем возможность узнать, как слова в предложении 
+соотносятся друг с другом. К примеру, мы можем предсказать, является ли слово подлежащим или дополнением. 
 
-The `.dep_` attribute returns the predicted dependency label.
+Атрибут `.dep_` содержит предсказанную синтаксическую роль слова.
 
-The `.head` attribute returns the syntactic head token. You can also think of it
-as the parent token this word is attached to.
+Атрибут `.head` хранит ссылку на главный токен, иными словами родительский токен, 
+для которого текущий токен является зависимым.
 
 ---
 
-# Dependency label scheme
+# Схема синтаксического аннотирования
 
 <img src="/dep_example.png" alt="Visualization of the dependency graph for 'She ate the pizza'" />
 
-| Label     | Description          | Example |
-| --------- | -------------------- | ------- |
-| **nsubj** | nominal subject      | She     |
-| **dobj**  | direct object        | pizza   |
-| **det**   | determiner (article) | the     |
+| Аннотация | Описание               | Пример  |
+| --------- | ---------------------- | ------- |
+| **nsubj** | подлежащее             | She     |
+| **dobj**  | прямое дополнение      | pizza   |
+| **det**   | артикль                | the     |
 
-Notes: To describe syntactic dependencies, spaCy uses a standardized label
-scheme. Here's an example of some common labels:
+Notes: Для описания синтаксических зависимостей spaCy использует 
+стандартизированную схему аннотирования. Ниже приведены примеры некоторых общепринятых аннотаций:
 
-The pronoun "She" is a nominal subject attached to the verb – in this case, to
-"ate".
+Местоимение "She" ("она") является подлежащим, присоединённым к глаголу "ate" ("ела") в данном случае.
 
-The noun "pizza" is a direct object attached to the verb "ate". It is eaten by
-the subject, "she".
+Существительное "pizza" ("пицца") является прямым дополнением к глаголу "ate" ("ела").
+Пицца была съедена подлежащим "she" ("она").
 
-The determiner "the", also known as an article, is attached to the noun "pizza".
+Артикль "the" присоединён к существительному "pizza" ("пицца").
 
 ---
 
-# Predicting Named Entities
+# Предсказание именованных сущностей
 
 <img src="/ner_example.png" alt="Visualization of the named entities in 'Apple is looking at buying U.K. startup for $1 billion'" width="80%" />
 
 ```python
-# Process a text
+# Обработка текста
 doc = nlp("Apple is looking at buying U.K. startup for $1 billion")
 
-# Iterate over the predicted entities
+# Перебор предсказанных именованных сущностей
 for ent in doc.ents:
-    # Print the entity text and its label
+    # Вывод текстового значения сущности и её аннотации
     print(ent.text, ent.label_)
 ```
 
@@ -175,25 +175,27 @@ U.K. GPE
 $1 billion MONEY
 ```
 
-Notes: Named entities are "real world objects" that are assigned a name – for
-example, a person, an organization or a country.
+Notes: Именованные сущности - это объекты "реального мира", у которых есть имена: 
+люди, организации, страны.
 
-The `doc.ents` property lets you access the named entities predicted by the
-model.
+С помощью `doc.ents` можно получить список именованных сущностей, предсказанных 
+моделью для данного документа.
 
-It returns an iterator of `Span` objects, so we can print the entity text and
-the entity label using the `.label_` attribute.
+Этот список является последовательностью объектов `Span`, что позволяет нам 
+выводить текстовое значение именованной сузности и её аннотацию с помощью атрибута `.label_`.
 
-In this case, the model is correctly predicting "Apple" as an organization,
-"U.K." as a geopolitical entity and "\$1 billion" as money.
+В данном примере модель корректно определила "Apple" как организацию,
+"U.K." ("Великобритания") как геополитическую сущность 
+и "\$1 billion" ("1 миллиард долларов") как денежную величину.
 
 ---
 
-# Tip: the spacy.explain method
+# Полезное: метод spacy.explain
 
-Get quick definitions of the most common tags and labels.
+Возможность получить краткое определение самых распространённых аннотаций.
 
 ```python
+# определение spaCy: 'Страны, города, государства'
 spacy.explain("GPE")
 ```
 
@@ -202,6 +204,7 @@ spacy.explain("GPE")
 ```
 
 ```python
+# определение spaCy: 'имя собственное, ед. число'
 spacy.explain("NNP")
 ```
 
@@ -210,6 +213,7 @@ spacy.explain("NNP")
 ```
 
 ```python
+# определение spaCy: 'прямое дополнение'
 spacy.explain("dobj")
 ```
 
@@ -217,17 +221,17 @@ spacy.explain("dobj")
 'direct object'
 ```
 
-Notes: A quick tip: To get definitions for the most common tags and labels, you
-can use the `spacy.explain` helper function.
+Notes: Небольшой совет: чтобы получить краткое определение самых распространённых аннотаций, 
+можно воспользоваться вспомогательным методом `spacy.explain`.
 
-For example, "GPE" for geopolitical entity isn't exactly intuitive – but
-`spacy.explain` can tell you that it refers to countries, cities and states.
+Например, аннотация "GPE" обозначает геополитическую сущность, что сложно назвать 
+интуитивно понятным, однако, `spacy.explain` показывает, что она 
+имеет отношение к странам, городам и государствам.
 
-The same works for part-of-speech tags and dependency labels.
+Также это работает для частей речи и синтаксических аннотаций.
 
 ---
 
-# Let's practice!
+# Давайте потренируемся!
 
-Notes: Now it's your turn. Let's take a look at spaCy's statistical models and
-their predictions.
+Notes: Теперь ваша очередь. Давайте опробуем статистические модели spaCy на практике.

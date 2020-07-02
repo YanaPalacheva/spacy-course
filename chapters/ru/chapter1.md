@@ -1,311 +1,306 @@
 ---
-title: 'Chapter 1: Finding words, phrases, names and concepts'
+title: 'Глава 1: Нахождение слов, фраз, названий и концептов'
 description:
-  "This chapter will introduce you to the basics of text processing with spaCy.
-  You'll learn about the data structures, how to work with statistical models,
-  and how to use them to predict linguistic features in your text."
+  "Эта глава познакомит вас с основами обработки текста с помощью spaCy.
+   Вы узнаете о структурах данных и научитесь определять лингвистические характеристики текста 
+   с помощью статистических моделей."
 prev: null
 next: /chapter2
 type: chapter
 id: 1
 ---
 
-<exercise id="1" title="Introduction to spaCy" type="slides,video">
+<exercise id="1" title="Введение в spaCy" type="slides,video">
 
 <slides source="chapter1_01_introduction-to-spacy" start="0:165" end="3:01">
 </slides>
 
 </exercise>
 
-<exercise id="2" title="Getting Started">
+<exercise id="2" title="Первые шаги">
 
-Let's get started and try out spaCy! In this exercise, you'll be able to try out
-some of the 55+ [available languages](https://spacy.io/usage/models#languages).
+Давайте приступим и посмотрим на spaCy в действии! В этом упражнении вы 
+сможете опробовать некоторые из 55+ [доступных языков](https://spacy.io/usage/models#languages).
 
-### Part 1: English
+### Часть 1: Английский
 
-- Import the `English` class from `spacy.lang.en` and create the `nlp` object.
-- Create a `doc` and print its text.
+- Импортируйте класс `English` из `spacy.lang.en` и создайте объект `nlp`.
+- Создайте объект `doc` и выведите его текстовое значение.
 
 <codeblock id="01_02_01"></codeblock>
 
-### Part 2: German
+### Часть 2: Немецкий
 
-- Import the `German` class from `spacy.lang.de` and create the `nlp` object.
-- Create a `doc` and print its text.
+- Импортируйте класс `German` из `spacy.lang.de` и создайте объект `nlp`.
+- Создайте объект `doc` и выведите его текстовое значение.
 
 <codeblock id="01_02_02"></codeblock>
 
-### Part 3: Spanish
+### Часть 3: Испанский
 
-- Import the `Spanish` class from `spacy.lang.es` and create the `nlp` object.
-- Create a `doc` and print its text.
+- Импортируйте класс `Spanish` из `spacy.lang.es` и создайте объект `nlp`.
+- Создайте объект `doc` и выведите его текстовое значение.
 
 <codeblock id="01_02_03"></codeblock>
 
 </exercise>
 
-<exercise id="3" title="Documents, spans and tokens">
+<exercise id="3" title="Документы, спаны и токены">
 
-When you call `nlp` on a string, spaCy first tokenizes the text and creates a
-document object. In this exercise, you'll learn more about the `Doc`, as well as
-its views `Token` and `Span`.
+Чтобы создать документ, необходимо послать текстовую строку в объект `nlp` в качестве аргумента: 
+spaCy разобьёт текст на токены и вернёт готовый документ. В этом упражнении вы узнаете больше как об
+объекте `Doc`, так и о вариантах его представления:  объектах `Token` и `Span`.
 
-### Step 1
+### Шаг 1
 
-- Import the `English` language class and create the `nlp` object.
-- Process the text and instantiate a `Doc` object in the variable `doc`.
-- Select the first token of the `Doc` and print its `text`.
+- Импортируйте класс `English` из `spacy.lang.en` и создайте объект `nlp`.
+- Обработайте с помощью него текст и создайте экземпляр объекта `Doc`, сохраните его в переменную `doc`.
+- Получите первый токен документа `Doc` и выведите его текстовое значение `text`.
 
 <codeblock id="01_03_01">
 
-You can index into a `Doc` the same way you index into a list in Python. For
-example, `doc[4]` will give you the token at index 4, which is the fifth token
-in the text. Remember that in Python the first index is 0, not 1.
+Перебор элементов объекта `Doc` осуществляется по аналогии со списками в Python.
+Например, `doc[4]` вернёт токен на позиции 4, то есть пятый токен текста. 
+Не забывайте, что нумерация индексов в Python начинается с 0, а не с 1.
 
 </codeblock>
 
-### Step 2
+### Шаг 2
 
-- Import the `English` language class and create the `nlp` object.
-- Process the text and instantiate a `Doc` object in the variable `doc`.
-- Create a slice of the `Doc` for the tokens "tree kangaroos" and "tree
+- Импортируйте класс `English` из `spacy.lang.en` и создайте объект `nlp`.
+- Обработайте с помощью него текст и создайте экземпляр объекта `Doc`, сохраните его в переменную `doc`.
+- Создайте срез объекта `Doc`, соответствующий токенам "tree kangaroos" и "tree
   kangaroos and narwhals".
 
 <codeblock id="01_03_02">
 
-Creating a slice of a `Doc` works just like creating a slice of a list in Python
-using the `:` notation. Remember that the last token index is _exclusive_ – for
-example, `0:4` describes the tokens 0 _up to_ token 4, but not including
-token 4.
+Срез объекта `Doc` создаётся так же, как и срез списка в Python: с помощью оператора `:`.
+Не забывайте, что последний индекс _не включается_ в срез. Например, `0:4` описывает токены 
+с позиции 0 _до_ 4, не включая токен на позиции 4.
 
 </codeblock>
 
 </exercise>
 
-<exercise id="4" title="Lexical attributes">
+<exercise id="4" title="Лексические атрибуты">
 
-In this example, you'll use spaCy's `Doc` and `Token` objects, and lexical
-attributes to find percentages in a text. You'll be looking for two subsequent
-tokens: a number and a percent sign.
+Цель этого упражнения - найти упоминания процентов в тексте, искользуя объекты `Doc` и `Token`, 
+а также лексические атрибуты. Нужно найти последовательности из двух токенов: числа и знака процента.
 
-- Use the `like_num` token attribute to check whether a token in the `doc`
-  resembles a number.
-- Get the token _following_ the current token in the document. The index of the
-  next token in the `doc` is `token.i + 1`.
-- Check whether the next token's `text` attribute is a percent sign "%".
+- Проверьте с помощью атрибута `like_num`, соответствует ли токен из `doc` числу.
+- Получите токен, _следующий_ за текущим. Его инжекс в документе `doc` - `token.i + 1`.
+- Проверьте, является ли значение атрибута `text` следующего токена знаком процента "%".
 
 <codeblock id="01_04">
 
-To get the token at a certain index, you can index into the `doc`. For example,
-`doc[5]` is the token at index 5.
+Чтобы узнать, какой токен стоит на конкретной позиции, можно получить его по индексу
+из `doc`. Например, `doc[5]` вернёт токен на позиции 5.
 
 </codeblock>
 
 </exercise>
 
-<exercise id="5" title="Statistical models" type="slides,video">
+<exercise id="5" title="Статистические модели" type="slides,video">
 
 <slides source="chapter1_02_statistical-models" start="3:12" end="7:01">
 </slides>
 
 </exercise>
 
-<exercise id="6" title="Model packages" type="choice">
+<exercise id="6" title="Пакеты моделей" type="choice">
 
-What's **not** included in a model package that you can load into spaCy?
+Что **не** является частью модели, загружаемой в spaCy отдельным пакетом?
 
 <choice>
-<opt text="A meta file including the language, pipeline and license.">
+<opt text="Файл с метаданными по языку, компонентам пайплайна и лицензии">
 
-All models include a `meta.json` that defines the language to initialize, the
-pipeline component names to load as well as general meta information like the
-model name, version, license, data sources, author and accuracy figures (if
-available).
-
-</opt>
-<opt text="Binary weights to make statistical predictions.">
-
-To predict linguistic annotations like part-of-speech tags, dependency labels or
-named entities, models include binary weights.
+Все модели содержат файл `meta.json`. Он сообщает spaCy, какой язык нужно инициализировать,
+какие компоненты пайплайна загружать, а также содержит такие метаданные, как название модели,
+версия, тип лицензии, источники данных, имя автора и оценку правильности предсказаний (если есть).
 
 </opt>
-<opt correct="true" text="The labelled data that the model was trained on.">
+<opt text="Матрица весов для статистических предсказаний.">
 
-Statistical models allow you to generalize based on a set of training examples.
-Once they're trained, they use binary weights to make predictions. That's why
-it's not necessary to ship them with their training data.
+Чтобы уметь предсказывать такие лингвистические характеристики, как части речи слов,
+их синтаксические роли, распознавать именованные сущности, модели необходимо хранить матрицу весов.
 
 </opt>
-<opt text="Strings of the model's vocabulary and their hashes.">
+<opt correct="true" text="Размеченные данные, на которых модель была обучена">
 
-Model packages include a `strings.json` that stores the entries in the model's
-vocabulary and the mapping to hashes. This allows spaCy to only communicate in
-hashes and look up the corresponding string if needed.
+Статистические модели позволяют делать предсказания на основе тренировочных данных 
+с помощью матрицы весов. Поэтому нет необходимости снабжать готовую модель тренировочными данными.
+
+</opt>
+<opt text="Строки, содержащие единицы вокабуляра модели и соответствующие им хэши">
+
+В пакет модели входит файл `strings.json`, который хранит единицы вокабуляра модели и
+соотвествующие им значения хэшей. Это позволяет spaCy оперировать исключительно хэшами и
+обращаться к соответсвующей строке только в случае необходимости.
 
 </opt>
 </choice>
 
 </exercise>
 
-<exercise id="7" title="Loading models">
+<exercise id="7" title="Загрузка моделей">
 
-The models we're using in this course are already pre-installed. For more
-details on spaCy's statistical models and how to install them on your machine,
-see [the documentation](https://spacy.io/usage/models).
+Все модели, которые мы будем использовать в этом курсе, уже предустановлены. 
+Более подробную информацию о статистических моделях spaCy и способах их установки 
+можно найти в [документации](https://spacy.io/usage/models).
 
-- Use `spacy.load` to load the small English model `"en_core_web_sm"`.
-- Process the text and print the document text.
+- Используйте `spacy.load`, чтобы загрузить небольшую модель для английского языка `"en_core_web_sm"`.
+- Обработайте текст и выведите документ на печать
 
 <codeblock id="01_07">
 
-To load a model, call `spacy.load` on its string name. Model names differ
-depending on the language and the data they were trained on – so make sure to
-use the correct name.
+Чтобы загрузить модель, вызовите метод `spacy.load` с названием модели в качестве параметра. 
+Названия моделей различаются в зависимости от того, на каких данных они были обучены,
+поэтому убедитесь, что вы используете правильное название.
 
 </codeblock>
 
 </exercise>
 
-<exercise id="8" title="Predicting linguistic annotations">
+<exercise id="8" title="Предсказание лингвистических характеристик текста">
 
-You'll now get to try one of spaCy's pre-trained model packages and see its
-predictions in action. Feel free to try it out on your own text! To find out
-what a tag or label means, you can call `spacy.explain` in the loop. For
-example: `spacy.explain("PROPN")` or `spacy.explain("GPE")`.
+В этом упражнении вы сможете посмотреть на одну из предобученных моделей spaCy 
+в действии. Не забудьте опробовать её на собственном тексте! Чтобы узнать, 
+что означает та или иная аннотация, вы можете вызвать метод `spacy.explain`. 
+Например, `spacy.explain("PROPN")` или `spacy.explain("GPE")`.
 
-### Part 1
+### Часть 1
 
-- Process the text with the `nlp` object and create a `doc`.
-- For each token, print the token text, the token's `.pos_` (part-of-speech tag)
-  and the token's `.dep_` (dependency label).
+- Обработайте текст с помощью объекта `nlp` и создайте `doc`.
+- Выведите для каждого токена его текстовое значение, часть речи `.pos_` и 
+его синтаксическую роль `.dep_`.
 
 <codeblock id="01_08_01">
 
-To create a `doc`, call the `nlp` object on a string of text. Remember that you
-need to use the token attribute names with an underscore to get the string
-values.
+Объект `doc` является результатом обработки текста объектом `nlp`. Не забудьте, что 
+строковые значения хранят атрибуты, имена которых заканчиваются нижним подчёркиванием.
 
 </codeblock>
 
-### Part 2
+### Часть 2
 
-- Process the text and create a `doc` object.
-- Iterate over the `doc.ents` and print the entity text and `label_` attribute.
+- Обработайте текст и создайте `doc`.
+- Выведите текстовые значения и атрибуты `label_` всех именованных сущностей из `doc.ents` в цикле.
 
 <codeblock id="01_08_02">
 
-To create a `doc`, call the `nlp` object on a string of text. Remember that you
-need to use the token attribute names with an underscore to get the string
-values.
+Объект `doc` является результатом обработки текста объектом `nlp`. Не забудьте, что 
+строковые значения хранят атрибуты, имена которых заканчиваются нижним подчёркиванием.
 
 </codeblock>
 
 </exercise>
 
-<exercise id="9" title="Predicting named entities in context">
+<exercise id="9" title="Предсказание именованных сущностей в контексте">
 
-Models are statistical and not _always_ right. Whether their predictions are
-correct depends on the training data and the text you're processing. Let's take
-a look at an example.
+Модели основаны на статистике, поэтому не могут быть правы _всегда_. Качество их 
+предсказаний зависит и от тренировочных данных, и от текста, подаваемого на вход. 
+Давайте убедимся в этом на примере.
 
-- Process the text with the `nlp` object.
-- Iterate over the entities and print the entity text and label.
-- Looks like the model didn't predict "iPhone X". Create a span for those tokens
-  manually.
+- Обработайте текст с помощью объекта `nlp`.
+- Выведите текстовые значения и аннотации именованных сущностей в цикле.
+- Модели не удалось предсказать "iPhone X". Создайте спан для этих токенов вручную.
 
 <codeblock id="01_09">
 
-- To create a `doc`, call the `nlp` object on the text. Named entities are
-  available as the `doc.ents` property.
-- The easiest way to create a `Span` object is to use the slice notation – for
-  example `doc[5:10]` for the token at position 5 _up to_ position 10. Remember
-  that the last token index is exclusive.
-
+- Объект `doc` является результатом обработки текста объектом `nlp`. Доступ к списку 
+  именованных сущностей можно получить с помощью `doc.ents`.
+- Самый простой способ создать объект `Span` - это использовать срез: например, 
+  `doc[5:10]` является срезом токенов с позиции 5 _до_ 10. Не забывайте, что 
+  токен на последней позиции не включается в срез.
+  
 </codeblock>
 
 </exercise>
 
-<exercise id="10" title="Rule-based matching" type="slides,video">
+<exercise id="10" title="Поиск совпадений по шаблонам" type="slides,video">
 
 <slides source="chapter1_03_rule-based-matching" start="7:118" end="10:55">
 </slides>
 
 </exercise>
 
-<exercise id="11" title="Using the Matcher">
+<exercise id="11" title="Использование матчера">
 
-Let's try spaCy's rule-based `Matcher`. You'll be using the example from the
-previous exercise and write a pattern that can match the phrase "iPhone X" in
-the text.
+Давайте опробуем `Matcher` в деле. Вы будете использовать пример 
+из предыдущего упражнения: вам нужно написать шаблон, которому соответствует 
+фраза "iPhone X".
 
-- Import the `Matcher` from `spacy.matcher`.
-- Initialize it with the `nlp` object's shared `vocab`.
-- Create a pattern that matches the `"TEXT"` values of two tokens: `"iPhone"`
-  and `"X"`.
-- Use the `matcher.add` method to add the pattern to the matcher.
-- Call the matcher on the `doc` and store the result in the variable `matches`.
-- Iterate over the matches and get the matched span from the `start` to the
-  `end` index.
+- Импортируйте класс `Matcher` из `spacy.matcher`.
+- Инициализируйте матчер с общим вокабуляром `vocab` объекта `nlp` в качестве аргумента.
+- Создайте шаблон, описывающий значения `"TEXT"` следующих двух токенов: 
+  `"iPhone"` и `"X"`.
+- С помощью метода `matcher.add` добавьте шаблон в матчер.
+- Вызовите матчер с документом `doc` в качестве аргумента 
+  и сохраните результат в переменную `matches`.
+- Переберите все найденные соответствия в цикле и получите
+  для каждого из них спан: срез с от позиции `start` до позиции `end`.
 
 <codeblock id="01_11">
 
-- The shared vocabulary is available as the `nlp.vocab` attribute.
-- A pattern is a list of dictionaries keyed by the attribute names. For example,
-  `[{"TEXT": "Hello"}]` will match one token whose exact text is "Hello".
-- The `start` and `end` values of each match describe the start and end index of
-  the matched span. To get the span, you can create a slice of the `doc` using
-  the given start and end.
+- Общий вокабуляр можно получить с помощью атрибута `nlp.vocab`.
+- Шаблон представляет собой список словарей, ключами для которых служат имена атрибутов.
+  Например, шаблону `[{"TEXT": "Hello"}]` будет соответствовать один токен с текстовым 
+  значением "Hello".
+- Значения `start` и `end` каждого найденного совпадения обозначают начальный и конечный индекс 
+  соответствующего спана в документе. Чтобы получить спан, можно создать срез документа `doc`, 
+  используя эти значения.
 
 </codeblock>
 
 </exercise>
 
-<exercise id="12" title="Writing match patterns">
+<exercise id="12" title="Написание шаблонов">
 
-In this exercise, you'll practice writing more complex match patterns using
-different token attributes and operators.
+Это упражнение заключается в написании более сложных шаблонов 
+с использованием различных атрибутов токенов и операторов.
 
-### Part 1
+### Часть 1
 
-- Write **one** pattern that only matches mentions of the _full_ iOS versions:
-  "iOS 7", "iOS 11" and "iOS 10".
+- Напишите **один** шаблон, которому будут соответствовать _полные_ имена 
+  версий iOS: "iOS 7", "iOS 11" и "iOS 10".
 
 <codeblock id="01_12_01">
 
-- To match a token with an exact text, you can use the `TEXT` attribute. For
-  example, `{"TEXT": "Apple"}` will match tokens with the exact text "Apple".
-- To match a number token, you can use the `"IS_DIGIT"` attribute, which will
-  only return `True` for tokens consisting of only digits.
+- Чтобы найти токен по точному сопадению текста, используйте атрибут `TEXT`.
+  Например, шаблону `{"TEXT": "Apple"}` будут соответствовать токены с текстовым 
+  значением "Apple".
+- Чтобы найти токен, соответствующий числу, используйте атрибут `"IS_DIGIT"`.
+  Его значение равно `True` только у токенов, состоящих из цифр.
 
 </codeblock>
 
-### Part 2
+### Часть 2
 
-- Write **one** pattern that only matches forms of "download" (tokens with the
-  lemma "download"), followed by a token with the part-of-speech tag `"PROPN"`
-  (proper noun).
+- Напишите **один** шаблон, которому будут соответствовать следующие последовательности: 
+  токен с леммой "download", за которым следует токен с частью речи `"PROPN"` (имя собственное).
 
 <codeblock id="01_12_02">
 
-- To specify a lemma, you can use the `"LEMMA"` attribute in the token pattern.
-  For example, `{"LEMMA": "be"}` will match tokens like "is", "was" or "being".
-- To find proper nouns, you want to match all tokens whose `"POS"` value equals
-  `"PROPN"`.
+- Чтобы задать лемму, используйте в шаблоне для токена атрибут `"LEMMA"`. Например, 
+  шаблону `{"LEMMA": "be"}` будут соответствовать такие токены, как "is", "was" и "being".
+- Чтобы найти имена собственные, нужно искать такие токены, для которых значение атрибута 
+  `"POS"` равен`"PROPN"`.
 
 </codeblock>
 
-### Part 3
+### Часть 3
 
-- Write **one** pattern that matches adjectives (`"ADJ"`) followed by one or two
-  `"NOUN"`s (one noun and one optional noun).
+- Напишите **один** шаблон, которому соответствует прилагательное (`"ADJ"`), 
+  за которым следует последовательность из одного или двух существительных (`"NOUN"`)
+  (одно обязательное существительное и одно опциональное).
 
 <codeblock id="01_12_03">
 
-- To find adjectives, look for tokens whose `"POS"` value equals `"ADJ"`. For
-  nouns, look for `"NOUN"`.
-- Operators can be added via the `"OP"` key. For example, `"OP": "?"` to match
-  zero or one time.
+- Чтобы найти прилагательные, нужно искать такие токены, 
+  для которых значение атрибута `"POS"` равен `"ADJ"`. В случае с существительными, 
+  нужно искать `"NOUN"`.
+- Операторы добавляются по ключу `"OP"`. Например, `"OP": "?"` позвоялет не включать токен 
+  вовсе или включить 1 раз.
 
 </codeblock>
 

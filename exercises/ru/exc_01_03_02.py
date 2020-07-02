@@ -1,15 +1,15 @@
-# Import the English language class and create the nlp object
+# Импорт класса английского языка и создание объекта nlp
 from ____ import ____
 
 nlp = ____
 
-# Process the text
+# Обработка текста
 doc = ____("I like tree kangaroos and narwhals.")
 
-# A slice of the Doc for "tree kangaroos"
+# Срез объекта Doc, соответствующий токенам "tree kangaroos"
 tree_kangaroos = ____
 print(tree_kangaroos.text)
 
-# A slice of the Doc for "tree kangaroos and narwhals" (without the ".")
+# Срез объекта Doc, соответствующий токенам "tree kangaroos and narwhals" (без ".")
 tree_kangaroos_and_narwhals = ____
 print(tree_kangaroos_and_narwhals.text)

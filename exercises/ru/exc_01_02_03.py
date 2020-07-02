@@ -1,10 +1,10 @@
-# Import the Spanish language class
+# Импорт класса испанского языка
 from spacy.lang.____ import ____
 
-# Create the nlp object
+# Создание объекта nlp
 nlp = ____
 
-# Process a text (this is Spanish for: "How are you?")
+# Обработка текста (это переводится с испанского как "Как дела?")
 doc = nlp("¿Cómo estás?")
 
 # Print the document text

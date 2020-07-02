@@ -1,12 +1,12 @@
 import spacy
 
-# Load the "en_core_web_sm" model
+# Загрузка модели "en_core_web_sm"
 nlp = ____
 
 text = "It’s official: Apple is the first U.S. public company to reach a $1 trillion market value"
 
-# Process the text
+# Обработка текста
 doc = ____
 
-# Print the document text
+# Вывод текстового значения документа
 print(____.____)

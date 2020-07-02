@@ -11,14 +11,14 @@ doc = nlp(
     "I also need to download Winzip?"
 )
 
-# Write a pattern that matches a form of "download" plus proper noun
+# Шаблон, которому соответствует любая форма "download" + имя собственное
 pattern = [{"LEMMA": ____}, {"POS": ____}]
 
-# Add the pattern to the matcher and apply the matcher to the doc
+# Добавление шаблона в матчер и применение матчера к документу
 matcher.add("DOWNLOAD_THINGS_PATTERN", None, pattern)
 matches = matcher(doc)
 print("Total matches found:", len(matches))
 
-# Iterate over the matches and print the span text
+# Перебор найденных соответствий и вывод их текстовых значений
 for match_id, start, end in matches:
     print("Match found:", doc[start:end].text)

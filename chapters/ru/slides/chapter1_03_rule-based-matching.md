@@ -2,122 +2,129 @@
 type: slides
 ---
 
-# Rule-based matching
+# Поиск совпадений по шаблонам
 
-Notes: In this lesson, we'll take a look at spaCy's matcher, which lets you
-write rules to find words and phrases in text.
-
----
-
-# Why not just regular expressions?
-
-- Match on `Doc` objects, not just strings
-- Match on tokens and token attributes
-- Use the model's predictions
-- Example: "duck" (verb) vs. "duck" (noun)
-
-Notes: Compared to regular expressions, the matcher works with `Doc` and `Token`
-objects instead of only strings.
-
-It's also more flexible: you can search for texts but also other lexical
-attributes.
-
-You can even write rules that use the model's predictions.
-
-For example, find the word "duck" only if it's a verb, not a noun.
+Notes: В этом уроке мы научимся искать слова и фразы в тексте по заданным шаблонам с помощью 
+специального объекта spaCy: матчера (от англ. "match" - соответствие).
 
 ---
 
-# Match patterns
+# Почему бы просто не использовать регулярные выражения?
 
-- Lists of dictionaries, one per token
+- Поиск по объектам `Doc`, а не только по строкам
+- Поиск по токенам и их атрибутам
+- Использование предсказаний модели
+- Пример: "duck" (глагол, "нагибаться") vs. "duck" (существительное, "утка")
 
-- Match exact token texts
+Notes: В отличие от регулярных выражений, матчер может работать как со строками, так и с 
+объектами `Doc` и `Token`.
+
+Кроме того, он более гибкий: с помощью него можно осуществлять поиск 
+не только по тексту, но и по лексическим атрибутам.
+
+Можно даже задавать шаблоны, которые используют предсказания модели.
+
+Например, искать упоминания слова "duck" ("утка" или "нагибаться") 
+исключительно как глагола, не существительного.
+
+---
+
+# Шаблоны поиска
+
+- Список словарей, один на каждый токен
+
+- Поиск точного совпадения текстовых значений
 
 ```python
 [{"TEXT": "iPhone"}, {"TEXT": "X"}]
 ```
 
-- Match lexical attributes
+- Поиск совпадений по лексическим атрибутам
 
 ```python
 [{"LOWER": "iphone"}, {"LOWER": "x"}]
 ```
 
-- Match any token attributes
+- Поиск совпадений по различным атрибутам токенов
 
 ```python
 [{"LEMMA": "buy"}, {"POS": "NOUN"}]
 ```
 
-Notes: Match patterns are lists of dictionaries. Each dictionary describes one
-token. The keys are the names of token attributes, mapped to their expected
-values.
+Notes: Шаблон поиска представляет собой список словарей. Каждый словарь описывает один токен.
+Ключом в данном случае являются название атрибута токена, а значение описывает ожидаемый результат 
+для данного атрибута.
 
-In this example, we're looking for two tokens with the text "iPhone" and "X".
+В этом примере мы рассматриваем два токена с текстовыми значениями "iPhone" и "X".
 
-We can also match on other token attributes. Here, we're looking for two tokens
-whose lowercase forms equal "iphone" and "x".
+Теперь необходимо найти последовательность из таких двух токенов, у которых текстовые значения 
+в нижнем регистре равны "iphone" и "x" соответственно. Также мы можем использовать в 
+поиске и другие атрибуты токенов.
 
-We can even write patterns using attributes predicted by the model. Here, we're
-matching a token with the lemma "buy", plus a noun. The lemma is the base form,
-so this pattern would match phrases like "buying milk" or "bought flowers".
+Мы даже можем задавать шаблоны, которые используют предсказанные атрибуты токенов.
+В этом примере мы ищем такую последовательность токенов, чтобы лемма первого токена была 
+"buy" ("купить"), а второй токен был существительным. Лемма - это базовая форма слова, 
+поэтому этому шаблону будут соответствовать такие фразы, как "buying milk" ("покупая молоко") 
+и "bought flowers" ("купил цветы").
 
 ---
 
-# Using the Matcher (1)
+# Использование матчера (1)
 
 ```python
 import spacy
 
-# Import the Matcher
+# Испорт класса Matcher
 from spacy.matcher import Matcher
 
-# Load a model and create the nlp object
+# Загрузка модели и создание объекта nlp
 nlp = spacy.load("en_core_web_sm")
 
-# Initialize the matcher with the shared vocab
+# Инициализация матчера с общим вокабуляром в виде аргумента
 matcher = Matcher(nlp.vocab)
 
-# Add the pattern to the matcher
+# Добавление шаблона в матчер
 pattern = [{"TEXT": "iPhone"}, {"TEXT": "X"}]
 matcher.add("IPHONE_PATTERN", None, pattern)
 
-# Process some text
+# Обработка текста
 doc = nlp("Upcoming iPhone X release date leaked")
 
-# Call the matcher on the doc
+# Вызов матчера c документом doc в качестве аргумента
 matches = matcher(doc)
 ```
 
-Notes: To use a pattern, we first import the matcher from `spacy.matcher`.
+Notes: Чтобы использовать шаблон, нам в первую очередь нужно импортировать 
+класс `Matcher` из `spacy.matcher`.
 
-We also load a model and create the `nlp` object.
+Также нужно загрузить модель и создать объект `nlp`.
 
-The matcher is initialized with the shared vocabulary, `nlp.vocab`. You'll learn
-more about this later – for now, just remember to always pass it in.
+При инициализации матчера общий вокабуляр `nlp.vocab` используется в качестве аргумента. 
+Мы вернёмся к этому позже, пока же достаточно помнить, что его всегда нужно передавать 
+во время инициализации.
 
-The `matcher.add` method lets you add a pattern. The first argument is a unique
-ID to identify which pattern was matched. The second argument is an optional
-callback. We don't need one here, so we set it to `None`. The third argument is
-the pattern.
+Метод `matcher.add` позволяет добавить шаблон в матчер. Первый аргумент - это 
+уникальный идентификатор шаблон. Второй аргумент опциональный, он зарезервирован для 
+функции обратного вызова. Здесь она нам не нужна, поэтому мы присваиваем аргументу `None`.
+Третий аргумент - шаблон.
 
-To match the pattern on a text, we can call the matcher on any doc.
+Чтобы найти соответствие шаблону в тексте, необходимо вызвать матчер с 
+любым документом в качестве аргумента.
 
-This will return the matches.
+Этот вызов вернёт список найденных совпадений.
 
 ---
 
-# Using the Matcher (2)
+# Использование матчера (2)
 
 ```python
-# Call the matcher on the doc
+# Вызов матчера c документом doc в качестве аргумента
 doc = nlp("Upcoming iPhone X release date leaked")
 matches = matcher(doc)
 
-# Iterate over the matches
+# Перебор найденных соответствий
 for match_id, start, end in matches:
-    # Get the matched span
+    # Получение спана для найденного соответствий
     matched_span = doc[start:end]
     print(matched_span.text)
 ```
@@ -126,21 +133,22 @@ for match_id, start, end in matches:
 iPhone X
 ```
 
-- `match_id`: hash value of the pattern name
-- `start`: start index of matched span
-- `end`: end index of matched span
+- `match_id`: хэш-значение названия шаблона
+- `start`: начальный индекс найденного соответствия
+- `end`: конечный индекс найденного соответствия
 
-Notes: When you call the matcher on a doc, it returns a list of tuples.
+Notes: Вызов матчера с документов в качестве аргумента возвращает список кортежей.
 
-Each tuple consists of three values: the match ID, the start index and the end
-index of the matched span.
+Каждый кортеж состоит из трёх значений: идентификатор, начальный индекс и 
+конечный индекс найденного соответствия.
 
-This means we can iterate over the matches and create a `Span` object: a slice
-of the doc at the start and end index.
+
+Это означает, что мы можем перебирать найденные соответствия в цикле и создавать 
+объекты `Span`: срезы документа по начальному и конечному индексу.
 
 ---
 
-# Matching lexical attributes
+# Поиск совпадений по лексическим атрибутам
 
 ```python
 pattern = [
@@ -160,21 +168,22 @@ doc = nlp("2018 FIFA World Cup: France won!")
 2018 FIFA World Cup:
 ```
 
-Notes: Here's an example of a more complex pattern using lexical attributes.
+Notes: Это пример более сложного шаблона, использующего лексические атрибуты.
 
-We're looking for five tokens:
+Мы ищем последовательность из пяти токенов:
 
-A token consisting of only digits.
+Токен, состоящий только из цифр.
 
-Three case-insensitive tokens for "fifa", "world" and "cup".
+Три токена, у которых текстовые значения в нижнем регистре 
+совпадают с "fifa", "world" и "cup" соответственно.
 
-And a token that consists of punctuation.
+И заключительный токен, состоящий из знаков препинания.
 
-The pattern matches the tokens "2018 FIFA World Cup:".
+Этому шаблону соответствует следующая последовательность токенов: "2018 FIFA World Cup:".
 
 ---
 
-# Matching other token attributes
+# Поиск совпадений по другим атрибутам токенов
 
 ```python
 pattern = [
@@ -192,15 +201,15 @@ loved dogs
 love cats
 ```
 
-Note: In this example, we're looking for two tokens:
+Note: В этом примере мы ищем последовательность из двух токенов:
 
-A verb with the lemma "love", followed by a noun.
+Глагол с леммой "love" ("любить"), за которым следует существительное.
 
-This pattern will match "loved dogs" and "love cats".
+Этому шаблону соответствуют фразы "loved dogs" ("любил собак") и "love cats" ("люблю кошек").
 
 ---
 
-# Using operators and quantifiers (1)
+# Использование операторов и кванторов (1)
 
 ```python
 pattern = [
@@ -219,39 +228,42 @@ bought a smartphone
 buying apps
 ```
 
-Notes: Operators and quantifiers let you define how often a token should be
-matched. They can be added using the "OP" key.
+Notes: Операторы и кванторы позволяют регулировать, сколько раз токен
+должен появляться во фразе, чтобы она была включена в результат поиска по шаблону. 
+Их можно добавить в шаблом по ключу "OP".
 
-Here, the "?" operator makes the determiner token optional, so it will match a
-token with the lemma "buy", an optional article and a noun.
-
----
-
-# Using operators and quantifiers (2)
-
-| Example       | Description                  |
-| ------------- | ---------------------------- |
-| `{"OP": "!"}` | Negation: match 0 times      |
-| `{"OP": "?"}` | Optional: match 0 or 1 times |
-| `{"OP": "+"}` | Match 1 or more times        |
-| `{"OP": "*"}` | Match 0 or more times        |
-
-Notes: "OP" can have one of four values:
-
-An "!" negates the token, so it's matched 0 times.
-
-A "?" makes the token optional, and matches it 0 or 1 times.
-
-A "+" matches a token 1 or more times.
-
-And finally, an "\*" matches 0 or more times.
-
-Operators can make your patterns a lot more powerful, but they also add more
-complexity – so use them wisely.
+В данном примере оператор "?" делает токен артикля опциональным, то есть 
+этому шаблону будет соответствовать следующая последовательность: 
+токен с леммой "buy", опциональный артикль и существительное.
 
 ---
 
-# Let's practice!
+# Использование операторов и кванторов (2)
 
-Notes: Token-based matching opens up a lot of new possibilities for information
-extraction. So let's try it out and write some patterns!
+| Пример        | Описание                                       |
+| ------------- | ---------------------------------------------- |
+| `{"OP": "!"}` | Отрицание: не включать                         |
+| `{"OP": "?"}` | Опциональность: не включать или включать 1 раз |
+| `{"OP": "+"}` | Включать 1 или больше раз                      |
+| `{"OP": "*"}` | Включать 0 или больше раз                      |
+
+Notes: Оператор "OP" может принимать следующие значения:
+
+"!" отбрасывает токен, то есть он не включается в последовательность.
+
+"?" делает токен опциональным, то есть он любо не включён, либо включён 1 раз.
+
+"+" позволяет включать токен как минимум 1 раз.
+
+И наконец, "\*" позволяет включать токен сколько угодно раз (0 и более).
+
+Операторы могут сделать шаблон очень эффективным, но в то же время они добаляют 
+сложности, поэтому их нужно использовать с умом.
+
+---
+
+# Давайте потренируемся!
+
+Notes: Поиск совпадений по шаблонам на основе токенов открывает новые возможности для 
+извлечения информации их текста. Давайте опробуем этот метод и напишем несколько 
+шаблонов самостоятельно!
